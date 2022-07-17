@@ -6,8 +6,8 @@ function ucFirst(str) {
 
   return strUpper;
   // alert( str.slice(1) ); добавит нам все буквы после первой
-  // alert( 'name'[0].toUpperCase() ); // 'n'
-  // alert( str.charAt(1000) ); // '' (пустая строка)
+  // alert( 'name'[0].toUpperCase() ); // увеличит букву
+  // alert( str.charAt(1000) ); // '' в случае, если пустая строка
 }
 console.log( ucFirst('петя') );
 
