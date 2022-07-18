@@ -33,6 +33,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^2.0.1",
     "karma-mocha-reporter": "git+https://github.com/javascriptru/karma-mocha-reporter.git",
-    "karma-viewport": "^1.0.6"
+    "karma-viewport": "^1.0.6",
+    "prettier": "2.7.1"
   }
 }
