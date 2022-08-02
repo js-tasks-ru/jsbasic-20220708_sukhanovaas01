@@ -23,7 +23,7 @@ function initCarousel() {
     } else if (event.target.closest(".carousel__arrow_left")) {
       position--;
       shift -= carouselInner.offsetWidth;
-      carouselInner.style.transform = `translateX(${-shift}px)`;
+      carouselInner.style.transform = `translateX(${-shift}px)`; // назад
     }
     position >= 3 ? (next.style.display = "none") : (next.style.display = "");
     position == 0 ? (prev.style.display = "none") : (prev.style.display = "");
