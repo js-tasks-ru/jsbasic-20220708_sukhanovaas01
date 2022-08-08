@@ -16,8 +16,7 @@
 export default class UserTable {
   constructor(rows) {
     this.rows = rows;
-    this.render(); //rows будут получаться при создании объекта из класса UserTable
-    // получим массив из 4 объектов
+    this.render();
   }
 
   render() {
