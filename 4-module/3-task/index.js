@@ -1,6 +1,5 @@
 function highlight(table) {
   for (let tr of table.rows) {
-    console.log(tr);
     if (tr.cells[1].innerHTML < "18") {
       tr.style.textDecoration = "line-through";
     }

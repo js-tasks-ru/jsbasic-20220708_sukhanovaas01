@@ -6,12 +6,12 @@
 
 ```js
 let product = {
-    name: "Laab kai chicken salad", // название товара
-    price: 10, // цена товара
-    category: "salads", // категория, к которой он относится, нам это понадобится чуть позже
-    image: "laab_kai_chicken_salad.png", // название картинки товара
-    id: "laab-kai-chicken-salad" // уникальный идентификатор товара, нужен для добавления товара в корзину
-}
+  name: "Laab kai chicken salad", // название товара
+  price: 10, // цена товара
+  category: "salads", // категория, к которой он относится, нам это понадобится чуть позже
+  image: "laab_kai_chicken_salad.png", // название картинки товара
+  id: "laab-kai-chicken-salad", // уникальный идентификатор товара, нужен для добавления товара в корзину
+};
 
 let productCard = new ProductCard(product);
 ```
@@ -22,25 +22,31 @@ let productCard = new ProductCard(product);
 
 ```html
 <div class="card">
-    <div class="card__top">
-        <img src="/assets/images/products/...значение product.image..." class="card__image" alt="product">
-        <span class="card__price">€<!--значение product.price--></span>
-    </div>
-    <div class="card__body">
-        <div class="card__title"><!--значение product.name--></div>
-        <button type="button" class="card__button">
-            <img src="/assets/images/icons/plus-icon.svg" alt="icon">
-        </button>
-    </div>
+  <div class="card__top">
+    <img
+      src="/assets/images/products/...значение product.image..."
+      class="card__image"
+      alt="product"
+    />
+    <span class="card__price">€<!--значение product.price--></span>
+  </div>
+  <div class="card__body">
+    <div class="card__title"><!--значение product.name--></div>
+    <button type="button" class="card__button">
+      <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
+    </button>
+  </div>
 </div>
 ```
 
 На вёрстку можно посмотреть в файле `static.html`, а пример использования компонента `ProductCard` - в файле `index.html`.
 
 **Обращаем ваше внимание:**
+
 - Для создания DOM-элементов, рекомендуем использовать хэлпер `createElement`, который импортируется в первой строке `index.js`: `import createElement from '../../assets/lib/create-element.js';`. Он позволяет создать, готовый елемент из вашей вёрстки, пример:
+
 ```js
-import createElement from '../../assets/lib/create-element.js';
+import createElement from "../../assets/lib/create-element.js";
 
 const table = createElement(`
     <table class="table">
@@ -58,18 +64,20 @@ const table = createElement(`
             </tr>
         </tbody>
     </table>
-`)
+`);
 ```
+
 - Цена представлена в объекте товара, как число (например, вот так: `10`), но отобразить её нужно, во-первых, со значком валюты в начале - `€`, а во-вторых, с двумя символами после точки - `€10.00`. Чтобы получить два символа, воспользуйтесь методом числа `toFixed`, про который можно прочитать [вот в этой статье](https://learn.javascript.ru/number#okruglenie).
 - Нужно дополнить путь к картинке товара. Все картинки товаров лежат в папке `/assets/images/products`. В тоже время, для каждого товара нам нужно прописать путь к конкретной картинке. Название картинки вы найдёте в свойстве `image` объекта товара. В итоге у вас должен получиться путь вида `/assets/images/products/laab_kai_chicken_salad.png`, где `laab_kai_chicken_salad.png` вы возьмёте из свойства `image`. Этот путь нужно прописать в атрибут `src` картинки `img` с CSS классом `card__image` в вёрстке.
 - Созданный DOM-элемент вашей карточки, необходимо сохранить в свойство `elem` вашего класса `ProductCard`, для того чтобы его можно было использовать вот так (см. пример в `index.html`):
 
 ```js
-let productCard = new ProductCard(product); 
+let productCard = new ProductCard(product);
 console.log(productCard.elem); // корневой HTML элемента карточки товара
 ```
 
 - Cвойство `elem` не должно быть геттером(`get elem()`), который при каждом вызове создает новый DOM-елемент, так как ваш компонент могут использовать несколько раз. Поэтому допускается геттер, который просто возвращает созданный DOM-елемент, к примеру:
+
 ```js
 get elem() {
     return this._container;
@@ -82,7 +90,7 @@ get elem() {
 
 В дальнейшем этот компонент будет использоваться в списке товаров, а также будет участвовать в добавлении их в корзину.
 
-А именно, при клике пользователя по кнопке с классом `card__button` генерировать пользовательское событие на корневом HTML элементе компонента (который хранится в свойстве `elem`), такого вида: 
+А именно, при клике пользователя по кнопке с классом `card__button` генерировать пользовательское событие на корневом HTML элементе компонента (который хранится в свойстве `elem`), такого вида:
 
 ```js
 new CustomEvent("product-add", { // имя события должно быть именно "product-add"
