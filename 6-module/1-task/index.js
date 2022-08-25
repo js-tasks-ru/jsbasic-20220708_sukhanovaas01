@@ -29,13 +29,15 @@ export default class UserTable {
     <th>Зарплата</th>
     <th>Город</th>
     <th></th>
-  </tr></thead>`
+  </tr>
+  </thead>`
     );
     this.elem.insertAdjacentHTML(
       "beforeEnd",
       `<tbody>${this.rows
         .map((item) => {
-          return `<tr><td>${item.name}</td><td>${item.age}</td><td>${item.salary}</td><td>${item.city}</td><td><button class="remove-button">[x]</button></td></tr>`;
+          return `<tr><td>${item.name}</td><td>${item.age}</td><td>${item.salary}
+          </td><td>${item.city}</td><td><button class="remove-button">[x]</button></td></tr>`;
         })
         .join("")}</tbody>`
     );
