@@ -41,7 +41,6 @@ export default class StepSlider {
     this.spans = activeStep.querySelectorAll("span");
 
     this.spans[this.value].classList.add("slider__step-active");
-    console.log("this.spans[this.value]", this.spans[this.value]);
   }
 
   onClick = (event) => {

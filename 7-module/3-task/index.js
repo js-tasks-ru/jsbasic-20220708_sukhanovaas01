@@ -44,14 +44,7 @@ export default class StepSlider {
 
   onClick = (event) => {
     let left = event.clientX - this.elem.getBoundingClientRect().left;
-    console.log("event.clientX", event.clientX);
-    console.log("left", left);
-    console.log(
-      "this.elem.getBoundingClientRect",
-      this.elem.getBoundingClientRect()
-    );
     let leftRelative = left / this.elem.offsetWidth;
-    console.log("leftRelative", leftRelative);
     let segments = this.steps - 1;
     let approximateValue = leftRelative * segments;
     let value = Math.round(approximateValue);
