@@ -11,7 +11,7 @@
 Исходный файл `index.js`:
 
 ```js
-import createElement from '../../assets/lib/create-element.js';
+import createElement from "../../assets/lib/create-element.js";
 
 export default class CartIcon {
   constructor() {
@@ -28,29 +28,34 @@ export default class CartIcon {
   // Заполнить её данными из объекта cart (объяснено ниже)
   update(cart) {
     if (!cart.isEmpty()) {
-      this.elem.classList.add('cart-icon_visible');
+      this.elem.classList.add("cart-icon_visible");
 
       this.elem.innerHTML = `
         <div class="cart-icon__inner">
           <span class="cart-icon__count">${cart.getTotalCount()}</span>
-          <span class="cart-icon__price">€${cart.getTotalPrice().toFixed(2)}</span>
+          <span class="cart-icon__price">€${cart
+            .getTotalPrice()
+            .toFixed(2)}</span>
         </div>`;
 
       this.updatePosition();
 
-      this.elem.classList.add('shake');
-      this.elem.addEventListener('transitionend', () => {
-        this.elem.classList.remove('shake');
-      }, {once: true});
-
+      this.elem.classList.add("shake");
+      this.elem.addEventListener(
+        "transitionend",
+        () => {
+          this.elem.classList.remove("shake");
+        },
+        { once: true }
+      );
     } else {
-      this.elem.classList.remove('cart-icon_visible');
+      this.elem.classList.remove("cart-icon_visible");
     }
   }
 
   addEventListeners() {
-    document.addEventListener('scroll', () => this.updatePosition());
-    window.addEventListener('resize', () => this.updatePosition());
+    document.addEventListener("scroll", () => this.updatePosition());
+    window.addEventListener("resize", () => this.updatePosition());
   }
 
   // позиционировать иконку корзины на экране
@@ -95,8 +100,8 @@ let cart = {
 
   getTotalPrice() {
     // Возвращает общую сумму всех товаров в корзине
-  }
-}
+  },
+};
 ```
 
 Если в корзине меняется количество товаров, внешний код сначала обновляет их количество в объекте `cart` таким образом, что методы `isEmpty`, `getTotalCount`, `getTotalPrice` начинают возвращать новые значения. После чего вызывает метод `cartIcon.update(cart)`, который вносит изменения в отображение иконки корзины:
@@ -122,15 +127,17 @@ let cart = {
 Начинать перемещение иконки корзины нужно сразу, как только при прокрутке верхний край иконки ушёл за пределы экрана.
 
 **По вертикали:**
+
 - иконка корзины должна отстоять на `50px` от верхнего края экрана.
 
 **По горизонтали иконка должна:**
-- отстоять на `20px` справа от первого элемент в документе с классом `container`.
+
+- отстоять на `20px` справа от первого элемента в документе с классом `container`.
 - при этом она должна быть не ближе `10px` от правого края окна.
 
-Если ширина окна браузера меньше или равна `767px`, то **перемещать иконку корзины не нужно вовсе**. Это связанно с тем, что на такой ширине у нас используются другие "мобильные" стили. Вы сами можете в этом убедиться в консоли разработчика.
+Если ширина окна браузера меньше или равна `767px`, то **перемещать иконку корзины не нужно вовсе**. Это связано с тем, что на такой ширине у нас используются другие "мобильные" стили. Вы сами можете в этом убедиться в консоли разработчика.
 
-Увидить поведение иконки в действии вы можете на странице проекта <https://course-jsbasic.javascript.ru>.
+Увидеть поведение иконки в действии вы можете на странице проекта <https://course-jsbasic.javascript.ru>.
 
 Обращаем ваше внимание, что в связи с тем, что это задание может быть решено многими способами, его достаточно сложно проверить автоматически. Поэтому если вы сталкнетесь с ситуацией, что в браузере всё работает как надо, но тесты не проходят, обращайтесь к преподавателю за помощью.
 
@@ -150,7 +157,8 @@ let cart = {
 
 ```js
 // текущая Y-координата относительно окна + текущая прокрутка
-let initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
+let initialTopCoord =
+  this.elem.getBoundingClientRect().top + window.pageYOffset;
 ```
 
 Это значение не обязательно вычислять каждый раз, достаточно рассчитать при первом вызове метода `updatePosition()`.
@@ -169,12 +177,12 @@ if (window.pageYOffset > initialTopCoord) {
 
 ### Вычисление отступа по горизонтали
 
-А чтобы понять какой оступ взять слева, нужно вычислить два значения:
+А чтобы понять какой отступ взять слева, нужно вычислить два значения:
 
-1. Значение, чтобы отступ был `20px` справа от первого элемент в документе с классом `container`. Для этого возьмём расстояние от края документа этого самого первого элемента с классом `container` и прибавим к нему `20px`:
+1. Значение, чтобы отступ был `20px` справа от первого элемента в документе с классом `container`. Для этого возьмём расстояние от края документа этого самого первого элемента с классом `container` и прибавим к нему `20px`:
 
 ```js
-document.querySelector('.container').getBoundingClientRect().right + 20;
+document.querySelector(".container").getBoundingClientRect().right + 20;
 ```
 
 2. Значение, чтобы отступ от правого края экрана был `10px`. Для этого нужно из общей ширины страницы (`document.documentElement.clientWidth`) вычесть ширину иконки корзины(`this.elem.offsetWidth`) и размер отступа от края(`10px`), вот так:
@@ -184,11 +192,13 @@ document.documentElement.clientWidth - this.elem.offsetWidth - 10;
 ```
 
 Теперь нужно выбрать одно значение из двух. Правильным значением для нас будет наименьшее из них. Сделаем это с помощью `Math.min`:
+
 ```js
-let leftIndent = Math.min(
-  document.querySelector('.container').getBoundingClientRect().right + 20,
-  document.documentElement.clientWidth - this.elem.offsetWidth - 10
-) + 'px'
+let leftIndent =
+  Math.min(
+    document.querySelector(".container").getBoundingClientRect().right + 20,
+    document.documentElement.clientWidth - this.elem.offsetWidth - 10
+  ) + "px";
 ```
 
 ### Применение фиксированного позиционирования
@@ -196,17 +206,18 @@ let leftIndent = Math.min(
 В итоге, чтобы фиксированно спозиционировать иконку корзины на странице нужно:
 
 ```js
-let leftIndent = Math.min(
-  document.querySelector('.container').getBoundingClientRect().right + 20,
-  document.documentElement.clientWidth - this.elem.offsetWidth - 10
-) + 'px'
+let leftIndent =
+  Math.min(
+    document.querySelector(".container").getBoundingClientRect().right + 20,
+    document.documentElement.clientWidth - this.elem.offsetWidth - 10
+  ) + "px";
 
 Object.assign(this.elem.style, {
-  position: 'fixed',
-  top: '50px',
+  position: "fixed",
+  top: "50px",
   zIndex: 1e3,
-  right: '10px',
-  left: leftIndent
+  right: "10px",
+  left: leftIndent,
 });
 ```
 
@@ -214,10 +225,10 @@ Object.assign(this.elem.style, {
 
 ```js
 Object.assign(this.elem.style, {
-  position: '',
-  top: '',
-  left: '',
-  zIndex: ''
+  position: "",
+  top: "",
+  left: "",
+  zIndex: "",
 });
 ```
 
@@ -231,10 +242,10 @@ let isMobile = document.documentElement.clientWidth <= 767;
 // Если условие выполняется, обнуляем стили к исходным
 if (document.documentElement.clientWidth <= 767) {
   Object.assign(this.elem.style, {
-    position: '',
-    top: '',
-    left: '',
-    zIndex: ''
+    position: "",
+    top: "",
+    left: "",
+    zIndex: "",
   });
 }
 ```

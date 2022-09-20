@@ -50,12 +50,12 @@ export default class Carousel {
     this.elem.addEventListener("click", (event) => {
       if (event.target.closest(".carousel__arrow_right")) {
         position++;
-        shift += carouselInner.offsetWidth;
-        carouselInner.style.transform = `translateX(${-shift}px)`;
+        shift -= carouselInner.offsetWidth;
+        carouselInner.style.transform = `translateX(${shift}px)`;
       } else if (event.target.closest(".carousel__arrow_left")) {
         position--;
-        shift -= carouselInner.offsetWidth;
-        carouselInner.style.transform = `translateX(${-shift}px)`;
+        shift += carouselInner.offsetWidth;
+        carouselInner.style.transform = `translateX(${shift}px)`;
       }
 
       position >= this.slides.length - 1
