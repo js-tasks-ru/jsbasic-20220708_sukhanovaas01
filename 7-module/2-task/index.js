@@ -1,4 +1,3 @@
-import Carousel from "../../6-module/3-task/index.js";
 import createElement from "../../assets/lib/create-element.js";
 
 export default class Modal {
@@ -31,6 +30,7 @@ export default class Modal {
     </div>
 
   </div>`;
+
     this.element = this.div.firstElementChild;
 
     this.initEventListeners();
@@ -38,7 +38,6 @@ export default class Modal {
 
   initEventListeners() {
     this.element.addEventListener("click", this.onClick);
-
     document.addEventListener("keydown", this.onKeyDown);
   }
 
@@ -49,13 +48,11 @@ export default class Modal {
 
   setTitle(title) {
     const modalTitle = this.element.querySelector(".modal__title");
-
     modalTitle.innerHTML = title;
   }
 
   setBody(body) {
     const modalBody = this.element.querySelector(".modal__body");
-
     modalBody.innerHTML = "";
     modalBody.append(body);
   }
@@ -76,7 +73,6 @@ export default class Modal {
   };
 
   onKeyDown = (event) => {
-    console.log(event.code);
     if (event.code === "Escape") {
       this.element.remove();
       document.body.classList.remove("is-modal-open");

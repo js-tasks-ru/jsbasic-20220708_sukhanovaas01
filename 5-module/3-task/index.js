@@ -11,12 +11,12 @@ function initCarousel() {
   carousel.addEventListener("click", (event) => {
     if (event.target.closest(".carousel__arrow_right")) {
       position++;
-      shift += carouselInner.offsetWidth;
-      carouselInner.style.transform = `translateX(${-shift}px)`;
+      shift -= carouselInner.offsetWidth;
+      carouselInner.style.transform = `translateX(${shift}px)`;
     } else if (event.target.closest(".carousel__arrow_left")) {
       position--;
-      shift -= carouselInner.offsetWidth;
-      carouselInner.style.transform = `translateX(${-shift}px)`;
+      shift += carouselInner.offsetWidth;
+      carouselInner.style.transform = `translateX(${shift}px)`;
     }
 
     position >= 3 ? (next.style.display = "none") : (next.style.display = "");

@@ -17,6 +17,7 @@ export default class UserTable {
   constructor(rows) {
     this.rows = rows;
     this.render();
+    this.elem.addEventListener("click", this.onClick);
   }
 
   render() {
@@ -37,11 +38,10 @@ export default class UserTable {
       `<tbody>${this.rows
         .map((item) => {
           return `<tr><td>${item.name}</td><td>${item.age}</td><td>${item.salary}
-          </td><td>${item.city}</td><td><button class="remove-button">[x]</button></td></tr>`;
+          </td><td>${item.city}</td><td><button>[x]</button></td></tr>`;
         })
         .join("")}</tbody>`
     );
-    this.elem.addEventListener("click", this.onClick);
   }
   onClick(event) {
     if (event.target.tagName === "BUTTON") {
