@@ -8,6 +8,7 @@ export default class Cart {
 
   constructor(cartIcon) {
     this.cartIcon = cartIcon;
+
     this.addEventListeners();
   }
 
@@ -15,6 +16,7 @@ export default class Cart {
     if (!product) {
       return;
     }
+    console.log(product);
     let productCheck = this.cartItems.find(
       (item) => item.product.id === product.id
     );
@@ -24,6 +26,7 @@ export default class Cart {
       this.cartItems.push({ product, count: 1 });
     }
     this.onProductUpdate(this.cartItem);
+    console.log(this.cartItems);
   }
 
   updateProductCount(productId, amount) {
@@ -126,6 +129,7 @@ export default class Cart {
 
     this.modal.element.addEventListener("click", this.onClick);
     let form = document.querySelector(".cart-form");
+
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       this.onSubmit();

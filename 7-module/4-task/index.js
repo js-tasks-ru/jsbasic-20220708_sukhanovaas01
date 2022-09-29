@@ -25,6 +25,7 @@ export default class StepSlider {
    <div class="slider__steps">
    </div>
  </div>`);
+    console.log(this.elem);
   }
 
   spanCollection(value) {
@@ -59,32 +60,32 @@ export default class StepSlider {
 
     this.setValue(Math.round(leftRelative * this.segments));
 
-    let btnClick = new CustomEvent("slider-change", {
-      detail: this.value,
-      bubbles: true,
-    });
-    this.elem.dispatchEvent(btnClick);
+    this.elem.dispatchEvent(
+      new CustomEvent("slider-change", {
+        detail: this.value,
+        bubbles: true,
+      })
+    );
   };
 
   onPointerDown = (event) => {
     event.preventDefault();
     document.addEventListener("pointermove", this.onPointerMove);
     this.elem.addEventListener("pointerup", this.onPointerUp);
+    // возможно сюда стоит дописать логику, чтобы решить проблему
   };
 
   onPointerMove = (event) => {
     event.preventDefault();
-    document.addEventListener("pointermove", this.onPointerMove);
+
     let leftRelative =
       (event.clientX - this.elem.getBoundingClientRect().left) /
       this.elem.offsetWidth;
-    if (leftRelative < 0) {
-      leftRelative = 0;
-    }
 
-    if (leftRelative > 1) {
-      leftRelative = 1;
-    }
+    leftRelative < 0 ? (leftRelative = 0) : leftRelative;
+
+    leftRelative > 1 ? (leftRelative = 1) : leftRelative;
+
     let leftPercents = leftRelative * 100;
     this.sub("thumb").style.left = `${leftPercents}%`;
     this.sub("progress").style.width = `${leftPercents}%`;
@@ -100,12 +101,20 @@ export default class StepSlider {
 
     this.setValue(Math.round(leftRelative * this.segments));
 
-    let btnClick = new CustomEvent("slider-change", {
-      detail: this.value,
-      bubbles: true,
-    });
-    this.elem.dispatchEvent(btnClick);
+    this.elem.dispatchEvent(
+      new CustomEvent("slider-change", {
+        detail: this.value,
+        bubbles: true,
+      })
+    );
+    this.onDragStop();
   };
+
+  onDragStop() {
+    this.sub("thumb").ondragstart = function () {
+      return false;
+    };
+  }
 
   sub(reference) {
     return this.elem.querySelector(`.slider__${reference}`);

@@ -9,6 +9,7 @@ export default class ProductGrid {
 
     this.filterData();
   }
+
   render() {
     this.elem = createElement(`<div class="products-grid">
     <div class="products-grid__inner">
@@ -17,15 +18,7 @@ export default class ProductGrid {
   }
 
   filterData() {
-    console.log(
-      "0",
-      this.elem.querySelector(".products-grid__inner").innerHTML
-    );
     this.elem.querySelector(".products-grid__inner").innerHTML = "";
-    console.log(
-      "1",
-      this.elem.querySelector(".products-grid__inner").innerHTML
-    );
 
     for (let product of this.products) {
       if (product.nuts && this.filters.noNuts) {
@@ -49,7 +42,6 @@ export default class ProductGrid {
   }
   updateFilter(filters) {
     Object.assign(this.filters, filters);
-
     this.filterData();
   }
 }

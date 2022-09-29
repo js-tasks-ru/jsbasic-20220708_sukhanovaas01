@@ -3,7 +3,10 @@ import createElement from "../../assets/lib/create-element.js";
 export default class RibbonMenu {
   constructor(categories) {
     this.categories = categories;
+
     this.render();
+    this.scrollMenu();
+    this.initEventListeners();
   }
   render() {
     this.elem = createElement(`<!--Корневой элемент RibbonMenu-->
@@ -23,54 +26,67 @@ export default class RibbonMenu {
       <img src="/assets/images/icons/angle-icon.svg" alt="icon">
     </button>
     </div>`);
+  }
 
-    let ribbonInner = this.elem.querySelector(".ribbon__inner");
-    let btnRight = this.elem.querySelector(".ribbon__arrow_right");
-    let btnLeft = this.elem.querySelector(".ribbon__arrow_left");
+  scrollMenu() {
+    let ribbonInner = this.sub("inner");
+
+    this.sub("arrow_left").classList.remove("ribbon__arrow_visible");
+
     ribbonInner.firstElementChild.classList += " ribbon__item_active";
     ribbonInner.lastElementChild.dataset.id += " ribbon__item_active";
 
     this.elem.addEventListener("click", (event) => {
-      if (event.target.closest(".ribbon__arrow_left")) {
-        ribbonInner.scrollBy(-350, 0);
-      }
-
       if (event.target.closest(".ribbon__arrow_right")) {
         ribbonInner.scrollBy(350, 0);
       }
+
+      if (event.target.closest(".ribbon__arrow_left")) {
+        console.log(event.target);
+        ribbonInner.scrollBy(-350, 0);
+      }
     });
 
+    this.hideArrow(ribbonInner);
+  }
+
+  hideArrow(ribbonInner) {
     ribbonInner.addEventListener("scroll", (event) => {
       let scrollLeft = ribbonInner.scrollLeft;
       let scrollWidth = ribbonInner.scrollWidth;
       let clientWidth = ribbonInner.clientWidth;
       let scrollRight = scrollWidth - scrollLeft - clientWidth;
-      if (scrollLeft < 1) {
-        btnLeft.classList.remove("ribbon__arrow_visible");
-      } else {
-        btnLeft.classList.add("ribbon__arrow_visible");
-      }
-      if (scrollRight < 1) {
-        btnRight.classList.remove("ribbon__arrow_visible");
-      } else {
-        btnRight.classList.add("ribbon__arrow_visible");
-      }
+
+      scrollLeft < 1
+        ? this.sub("arrow_left").classList.remove("ribbon__arrow_visible")
+        : this.sub("arrow_left").classList.add("ribbon__arrow_visible");
+
+      scrollRight < 1
+        ? this.sub("arrow_right").classList.remove("ribbon__arrow_visible")
+        : this.sub("arrow_right").classList.add("ribbon__arrow_visible");
     });
+  }
+
+  initEventListeners() {
     this.elem.addEventListener("click", this.onClick);
     this.elem.addEventListener("ribbon-select", (event) => console.log(event));
   }
+
   onClick = (event) => {
     if (event.target.classList.contains("ribbon__item")) {
       event.preventDefault();
-      const currentItemActive = this.elem.querySelector(".ribbon__item_active");
-      currentItemActive.classList.remove("ribbon__item_active");
+      this.sub("item_active").classList.remove("ribbon__item_active");
       event.target.classList += " ribbon__item_active";
 
       let btnClick = new CustomEvent("ribbon-select", {
         detail: event.target.closest("[data-id]").dataset.id,
         bubbles: true,
       });
-      this.elem.querySelector(".ribbon__inner").dispatchEvent(btnClick);
+      this.sub("inner").dispatchEvent(btnClick);
     }
   };
+
+  sub(reference) {
+    return this.elem.querySelector(`.ribbon__${reference}`);
+  }
 }
