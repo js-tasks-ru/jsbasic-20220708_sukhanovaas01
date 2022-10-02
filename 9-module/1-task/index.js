@@ -10,4 +10,4 @@ export default function promiseClick(button) {
   );
 }
 
-promiseClick(button).then((event) => console.log(event));
+// promiseClick(button).then((event) => console.log(event));

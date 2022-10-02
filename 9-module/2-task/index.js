@@ -17,8 +17,11 @@ export default class Main {
     let carousel = new Carousel(slides);
     document.querySelector(`[ data-carousel-holder ] `).append(carousel.elem);
 
-    let ribbonMenu = new RibbonMenu(categories);
-    document.querySelector(`[ data-ribbon-holder ] `).append(ribbonMenu.elem);
+    this.ribbonMenu = new RibbonMenu(categories);
+    document
+      .querySelector(`[ data-ribbon-holder ] `)
+      .append(this.ribbonMenu.elem);
+    console.log(this.ribbonMenu.elem);
 
     this.stepSlider = new StepSlider({ steps: 5, value: 3 });
     document
@@ -27,23 +30,21 @@ export default class Main {
 
     let cartIcon = new CartIcon();
     document.querySelector(`[ data-cart-icon-holder ] `).append(cartIcon.elem);
-    console.log(cartIcon);
 
     let cart = new Cart(cartIcon);
-    console.log("cart", cart);
-    console.log("cart.cartItems", cart.cartItems);
 
     const products = await this.showProducts();
 
-    let productsGrid = new ProductsGrid(products);
-
+    let productsGrid = new ProductsGrid(products, {
+      maxSpiciness: this.stepSlider.value,
+    });
     document
       .querySelector(`[ data-products-grid-holder ] `)
       .append(productsGrid.elem);
-    console.log(products);
 
     this.addToCart(products, cart);
-    this.filterSpiciness({ productsGrid, products });
+
+    this.filterProduct(productsGrid);
   }
 
   async showProducts(cart) {
@@ -56,12 +57,9 @@ export default class Main {
 
   addToCart(products, cart) {
     document.body.addEventListener("product-add", (event) => {
-      console.log("event.detail", event.detail);
-      console.log("products", products);
       let productToAdd = products.find(
         (product) => product.id === event.detail
       );
-      console.log("productToAdd", productToAdd);
 
       if (productToAdd) {
         cart.addProduct(productToAdd);
@@ -69,12 +67,25 @@ export default class Main {
     });
   }
 
-  filterSpiciness({ productsGrid, products }) {
+  filterProduct(productsGrid) {
     this.stepSlider.elem.addEventListener("slider-change", (event) => {
-      console.log("event.detail", event.detail);
-      console.log("productsGrid", productsGrid);
+      let spicinessValue = event.detail;
+      productsGrid.updateFilter({ maxSpiciness: spicinessValue });
+    });
 
-      productsGrid.updateFilter({ maxSpiciness: event.detail });
+    this.ribbonMenu.elem.addEventListener("ribbon-select", (event) => {
+      let categoryId = event.detail;
+      productsGrid.updateFilter({ category: categoryId });
+    });
+
+    let nutsCheckbox = document.getElementById("nuts-checkbox");
+    nutsCheckbox.addEventListener("change", (event) => {
+      productsGrid.updateFilter({ noNuts: event.target.checked });
+    });
+
+    let vegetarianCheckbox = document.getElementById("vegeterian-checkbox");
+    vegetarianCheckbox.addEventListener("change", (event) => {
+      productsGrid.updateFilter({ vegeterianOnly: event.target.checked });
     });
   }
 }

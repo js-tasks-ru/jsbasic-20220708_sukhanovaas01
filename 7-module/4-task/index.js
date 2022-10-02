@@ -3,10 +3,13 @@ import createElement from "../../assets/lib/create-element.js";
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps;
+
+    console.log("steps", steps);
+    console.log("this.steps", this.steps);
     this.segments = steps - 1;
     this.render();
 
-    this.spanCollection(value);
+    this.spanCollection();
     this.setValue(value);
     this.initEventListeners();
   }
@@ -25,10 +28,9 @@ export default class StepSlider {
    <div class="slider__steps">
    </div>
  </div>`);
-    console.log(this.elem);
   }
 
-  spanCollection(value) {
+  spanCollection() {
     for (let i = 0; i < this.steps; i++) {
       this.sub("steps").insertAdjacentHTML("afterBegin", `<span></span>`);
     }
@@ -45,7 +47,7 @@ export default class StepSlider {
     if (this.sub("step-active")) {
       this.sub("step-active").classList.remove("slider__step-active");
     }
-    this.sub("steps").children[this.value].classList.add("slider__step-active");
+    this.sub("steps").children[value].classList.add("slider__step-active");
   }
 
   initEventListeners() {
