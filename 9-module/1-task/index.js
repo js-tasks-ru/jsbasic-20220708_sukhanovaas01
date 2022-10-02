@@ -1,13 +1,5 @@
 export default function promiseClick(button) {
-  button.addEventListener(
-    "click",
-    (event) => {
-      return new Promise(resolve, reject {
-        resolve();
-      });
-    },
-    { once: true }
+  return new Promise((resolve, rej) =>
+    button.addEventListener("click", (event) => resolve(event))
   );
 }
-
-// promiseClick(button).then((event) => console.log(event));

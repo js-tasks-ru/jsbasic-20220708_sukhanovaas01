@@ -5,7 +5,7 @@ import RibbonMenu from "../../7-module/1-task/index.js";
 import categories from "../../7-module/1-task/categories.js";
 
 import StepSlider from "../../7-module/4-task/index.js";
-import ProductsGrid from "../../8-module/2-task/index.js";
+import ProductGrid from "../../8-module/2-task/index.js";
 
 import CartIcon from "../../8-module/1-task/index.js";
 import Cart from "../../8-module/4-task/index.js";
@@ -35,7 +35,7 @@ export default class Main {
 
     const products = await this.showProducts();
 
-    let productsGrid = new ProductsGrid(products, {
+    let productsGrid = new ProductGrid(products, {
       maxSpiciness: this.stepSlider.value,
     });
     document
