@@ -4,7 +4,7 @@ export default class CartIcon {
   constructor() {
     this.render();
 
-    this.addEventListeners();
+    this.initEventListeners();
   }
 
   render() {
@@ -36,7 +36,7 @@ export default class CartIcon {
     }
   }
 
-  addEventListeners() {
+  initEventListeners() {
     document.addEventListener("scroll", () => this.updatePosition());
     window.addEventListener("resize", () => this.updatePosition());
   }

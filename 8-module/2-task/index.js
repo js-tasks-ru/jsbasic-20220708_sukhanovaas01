@@ -2,13 +2,15 @@ import createElement from "../../assets/lib/create-element.js";
 import ProductCard from "../../6-module/2-task/index.js";
 
 export default class ProductGrid {
-  constructor(products) {
+  constructor(products, filters = {}) {
     this.products = products;
-    this.filters = {};
+    this.filters = filters;
+
     this.render();
 
     this.filterData();
   }
+
   render() {
     this.elem = createElement(`<div class="products-grid">
     <div class="products-grid__inner">
@@ -17,15 +19,7 @@ export default class ProductGrid {
   }
 
   filterData() {
-    console.log(
-      "0",
-      this.elem.querySelector(".products-grid__inner").innerHTML
-    );
     this.elem.querySelector(".products-grid__inner").innerHTML = "";
-    console.log(
-      "1",
-      this.elem.querySelector(".products-grid__inner").innerHTML
-    );
 
     for (let product of this.products) {
       if (product.nuts && this.filters.noNuts) {
@@ -49,7 +43,6 @@ export default class ProductGrid {
   }
   updateFilter(filters) {
     Object.assign(this.filters, filters);
-
     this.filterData();
   }
 }

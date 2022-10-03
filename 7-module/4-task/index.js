@@ -3,10 +3,13 @@ import createElement from "../../assets/lib/create-element.js";
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps;
+
+    console.log("steps", steps);
+    console.log("this.steps", this.steps);
     this.segments = steps - 1;
     this.render();
 
-    this.spanCollection(value);
+    this.spanCollection();
     this.setValue(value);
     this.initEventListeners();
   }
@@ -27,7 +30,7 @@ export default class StepSlider {
  </div>`);
   }
 
-  spanCollection(value) {
+  spanCollection() {
     for (let i = 0; i < this.steps; i++) {
       this.sub("steps").insertAdjacentHTML("afterBegin", `<span></span>`);
     }
@@ -44,7 +47,7 @@ export default class StepSlider {
     if (this.sub("step-active")) {
       this.sub("step-active").classList.remove("slider__step-active");
     }
-    this.sub("steps").children[this.value].classList.add("slider__step-active");
+    this.sub("steps").children[value].classList.add("slider__step-active");
   }
 
   initEventListeners() {
@@ -59,32 +62,32 @@ export default class StepSlider {
 
     this.setValue(Math.round(leftRelative * this.segments));
 
-    let btnClick = new CustomEvent("slider-change", {
-      detail: this.value,
-      bubbles: true,
-    });
-    this.elem.dispatchEvent(btnClick);
+    this.elem.dispatchEvent(
+      new CustomEvent("slider-change", {
+        detail: this.value,
+        bubbles: true,
+      })
+    );
   };
 
   onPointerDown = (event) => {
     event.preventDefault();
     document.addEventListener("pointermove", this.onPointerMove);
     this.elem.addEventListener("pointerup", this.onPointerUp);
+    // возможно сюда стоит дописать логику, чтобы решить проблему
   };
 
   onPointerMove = (event) => {
     event.preventDefault();
-    document.addEventListener("pointermove", this.onPointerMove);
+
     let leftRelative =
       (event.clientX - this.elem.getBoundingClientRect().left) /
       this.elem.offsetWidth;
-    if (leftRelative < 0) {
-      leftRelative = 0;
-    }
 
-    if (leftRelative > 1) {
-      leftRelative = 1;
-    }
+    leftRelative < 0 ? (leftRelative = 0) : leftRelative;
+
+    leftRelative > 1 ? (leftRelative = 1) : leftRelative;
+
     let leftPercents = leftRelative * 100;
     this.sub("thumb").style.left = `${leftPercents}%`;
     this.sub("progress").style.width = `${leftPercents}%`;
@@ -100,12 +103,20 @@ export default class StepSlider {
 
     this.setValue(Math.round(leftRelative * this.segments));
 
-    let btnClick = new CustomEvent("slider-change", {
-      detail: this.value,
-      bubbles: true,
-    });
-    this.elem.dispatchEvent(btnClick);
+    this.elem.dispatchEvent(
+      new CustomEvent("slider-change", {
+        detail: this.value,
+        bubbles: true,
+      })
+    );
+    this.onDragStop();
   };
+
+  onDragStop() {
+    this.sub("thumb").ondragstart = function () {
+      return false;
+    };
+  }
 
   sub(reference) {
     return this.elem.querySelector(`.slider__${reference}`);

@@ -3,8 +3,10 @@ import createElement from "../../assets/lib/create-element.js";
 export default class Carousel {
   constructor(slides) {
     this.slides = slides;
+
     this.render();
-    this.initCarousel();
+    this.scrollCarousel();
+    this.initEventListeners();
   }
   render() {
     this.elem = createElement(` <!--Корневой элемент карусели-->
@@ -33,19 +35,21 @@ export default class Carousel {
     </div>`;
         })
         .join("")}</div></div>`);
+  }
 
+  initEventListeners() {
     this.elem.addEventListener("click", this.onClick);
     this.elem.addEventListener("product-add", (event) => console.log(event));
   }
 
-  initCarousel() {
+  scrollCarousel() {
     let position = 0;
-    let carouselInner = this.elem.querySelector(".carousel__inner");
+    let carouselInner = this.sub("inner");
     let shift = 0;
-    let next = this.elem.querySelector(".carousel__arrow_right");
-    let prev = this.elem.querySelector(".carousel__arrow_left");
+    let next = this.sub("arrow_right");
+    let prev = this.sub("arrow_left");
 
-    position == 0 ? (prev.style.display = "none") : (prev.style.display = "");
+    this.hideArrowAtStart(position, prev);
 
     this.elem.addEventListener("click", (event) => {
       if (event.target.closest(".carousel__arrow_right")) {
@@ -57,12 +61,19 @@ export default class Carousel {
         shift += carouselInner.offsetWidth;
         carouselInner.style.transform = `translateX(${shift}px)`;
       }
-
-      position >= this.slides.length - 1
-        ? (next.style.display = "none")
-        : (next.style.display = "");
-      position == 0 ? (prev.style.display = "none") : (prev.style.display = "");
+      this.hideArrowAtEnd({ prev, next, position });
     });
+  }
+
+  hideArrowAtStart(position, prev) {
+    position == 0 ? (prev.style.display = "none") : (prev.style.display = "");
+  }
+
+  hideArrowAtEnd({ prev, next, position }) {
+    position >= this.slides.length - 1
+      ? (next.style.display = "none")
+      : (next.style.display = "");
+    position == 0 ? (prev.style.display = "none") : (prev.style.display = "");
   }
 
   onClick = (event) => {
@@ -71,7 +82,11 @@ export default class Carousel {
         detail: event.target.closest("[data-id]").dataset.id,
         bubbles: true,
       });
-      this.elem.querySelector(".carousel__button").dispatchEvent(btnClick);
+      this.sub("button").dispatchEvent(btnClick);
     }
   };
+
+  sub(ref) {
+    return this.elem.querySelector(`.carousel__${ref}`);
+  }
 }

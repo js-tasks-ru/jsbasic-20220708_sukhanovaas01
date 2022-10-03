@@ -4,6 +4,8 @@ export default class ProductCard {
   constructor(product) {
     this.product = product;
     this.render();
+
+    this.initEventListeners();
   }
   render() {
     this.elem = createElement(`<div class="card">
@@ -20,9 +22,13 @@ export default class ProductCard {
           </button>
       </div>
       </div>`);
+  }
+
+  initEventListeners() {
     this.elem.addEventListener("click", this.onClick);
     this.elem.addEventListener("product-add", (event) => console.log(event));
   }
+
   onClick = (event) => {
     let btnClick = new CustomEvent("product-add", {
       detail: this.product.id,
